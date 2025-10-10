@@ -1,201 +1,215 @@
-Advanced Multi-URL Web Scraper with Enhanced CSV Formatting
-A sophisticated Python web scraper designed to extract structured data from multiple URLs and export it in well-organized, readable CSV formats with comprehensive categorization and summary statistics.
+# 🕸️ Advanced Multi-URL Web Scraper with Enhanced CSV Formatting
 
-🚀 Features
-Multi-URL Support: Scrape multiple websites in a single run
+A **powerful and modular web scraper** designed for **multi-URL scraping** with **clean, structured CSV output**.  
+This project is built for **data analysts, researchers, and developers** who need organized data from multiple sources — all formatted neatly for immediate analysis.
 
-Structured Data Extraction: Organized parsing of tables, lists, version information, and content sections
+---
 
-Enhanced CSV Formatting: Clean, readable output with proper column organization
+## 🚀 Features
 
-Data Categorization: Automatic separation by data type (tables, lists, versions, sections)
+✅ **Multi-URL Scraping**
+- Easily scrape multiple web pages by editing a single configuration list.
 
-Comprehensive Reporting: Detailed summary statistics and extraction reports
+✅ **Structured CSV Output**
+- Automatically organizes extracted data (tables, lists, sections, versions) into readable, formatted CSV files.
 
-Error Handling: Robust retry mechanisms and error logging
+✅ **Smart Data Categorization**
+- Extracts and categorizes:
+  - Tables (`table_data`)
+  - Lists (`list_item`)
+  - Section Content (`section_content`)
+  - Version Information (`version_info`)
 
-Flexible Configuration: Easy-to-modify settings and URL management
+✅ **Automatic Summary Reports**
+- Generates a summary CSV with stats for URLs, data types, and scraping success rates.
 
-📋 Requirements
-bash
-pip install httpx beautifulsoup4 selenium webdriver-manager aiofiles
-⚙️ Configuration
-Adding URLs
-Edit the SCRAPING_URLS list in the configuration section:
+✅ **Built-in Logging**
+- Tracks scraping progress and errors in both the console and `scraper.log`.
 
-python
+✅ **Simple Configuration**
+- Modify only one list (`SCRAPING_URLS`) to add or remove target websites.
+
+---
+
+## 📂 Output Structure
+
+| File | Description |
+|------|--------------|
+| `software_versions_data.csv` | Combined structured data |
+| `software_versions_data_table_data.csv` | Extracted HTML tables |
+| `software_versions_data_list_item.csv` | List items from `<ul>` and `<ol>` |
+| `software_versions_data_section_content.csv` | Headings and content sections |
+| `software_versions_data_version_info.csv` | Version numbers and release info |
+| `software_versions_data_summary.csv` | Summary of scraping stats |
+
+---
+
+## ⚙️ Installation
+
+### Prerequisites
+- Python 3.8+
+- `pip` package manager
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/yourusername/advanced-multiurl-webscraper.git
+cd advanced-multiurl-webscraper
+```
+
+### 2. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 3. (Optional) Create a Virtual Environment
+```bash
+python -m venv venv
+source venv/bin/activate    # For Linux/macOS
+venv\Scripts\activate       # For Windows
+```
+
+---
+
+## 🧠 Usage
+
+### 1. Add Your Target URLs
+Edit the list `SCRAPING_URLS` at the top of the script:
+
+```python
 SCRAPING_URLS = [
-    'https://example.com/page1',
-    'https://example.com/page2',
-    'https://example.com/page3',
+    'https://www.dbf2002.com/news.html',
+    'https://example.com/software/releases',
 ]
-Output Configuration
-python
-DEFAULT_OUTPUT_FILENAME = "scraped_data"  # Base name for output files
-USE_ASYNC_MODE = False  # Set to True for asynchronous scraping
-Scraping Options
-python
-SCRAPING_CONFIG = {
-    'extract_tables': True,           # Extract table data
-    'extract_lists': True,            # Extract list items
-    'extract_sections': True,         # Extract content sections
-    'max_content_length': 500 * 1024 * 1024,  # Maximum content size
-    'timeout': 120,                   # Request timeout in seconds
-    'retry_attempts': 5,              # Number of retry attempts
-}
-🛠️ Usage
-Basic Usage
-python
-from scraper import run_formatted_scraper
+```
 
-# Scrape with default URLs and settings
-result = run_formatted_scraper()
+### 2. Run the Scraper
+```bash
+python scraper.py
+```
 
-# Scrape custom URLs
-urls = ['https://example.com/page1', 'https://example.com/page2']
-result = run_formatted_scraper(urls=urls, output_name="my_data")
-Advanced Usage
-python
-from scraper import FormattedScraper, ScraperConfig
+### 3. View the Results
+After execution, check the project folder for your CSV files:
+```
+software_versions_data.csv
+software_versions_data_summary.csv
+```
 
-# Custom configuration
-config = ScraperConfig()
-config.timeout = 60
-config.retry_attempts = 3
+---
 
-# Initialize scraper
-scraper = FormattedScraper(config)
+## 📊 Example Output
 
-# Run scraping
-urls = ['https://example.com/page1', 'https://example.com/page2']
-result = scraper.run_scraping(urls, "custom_output")
-📊 Output Files
-The scraper generates multiple organized CSV files:
+| record_id | data_type | source_url | domain | extraction_timestamp | version_number | context | full_text |
+|------------|------------|------------|--------|----------------------|----------------|----------|------------|
+| 0001_001   | version_info | https://www.dbf2002.com/news.html | dbf2002.com | 2025-10-11T12:35:00 | v1.2.3 | Table_2 | Latest release version v1.2.3 now available... |
 
-{output_name}.csv - Main combined data file
+---
 
-{output_name}_table_data.csv - Extracted table data only
+## 🧩 Key Components
 
-{output_name}_version_info.csv - Software version information
+| Component | Description |
+|------------|--------------|
+| `StructuredDataParser` | Extracts structured content (tables, lists, sections, versions) |
+| `FormattedCSVExporter` | Creates readable, consistent CSVs |
+| `FormattedScraper` | Main engine for scraping and report generation |
+| `ScraperLogger` | Handles console and file logging |
+| `StaticScraper` | Lightweight static HTML fetcher for compatibility |
 
-{output_name}_list_item.csv - List items and bullet points
+---
 
-{output_name}_section_content.csv - Content sections with headings
+## 🧱 Architecture Overview
 
-{output_name}_summary.csv - Comprehensive scraping summary report
+```mermaid
+graph TD;
+    A[URLs in SCRAPING_URLS] --> B[StaticScraper: Fetch HTML];
+    B --> C[StructuredDataParser: Extract & Clean Data];
+    C --> D[FormattedCSVExporter: Format & Export];
+    D --> E[Summary Report Generator];
+```
 
-🎯 Data Extraction Types
-1. Table Data
-Extracts structured table content
+---
 
-Preserves column headers and row data
+## 🪶 Example Configuration Snippet
 
-Handles complex table structures
+```python
+# Configuration: Only edit this section
+SCRAPING_URLS = [
+    'https://www.dbf2002.com/news.html',
+]
+DEFAULT_OUTPUT_FILENAME = "software_versions_data"
+USE_ASYNC_MODE = False
+```
 
-2. Version Information
-Automatically detects version numbers (e.g., 1.2.3, v2.1.0)
+---
 
-Identifies release dates and version patterns
+## 🛡️ Error Handling & Logging
 
-Provides context for version references
+- All scraping errors are logged to `scraper.log`
+- Automatic retries for failed requests
+- Graceful handling of missing or malformed HTML
 
-3. List Items
-Extracts ordered and unordered lists
+---
 
-Preserves list hierarchy and structure
+## 🧾 Summary Statistics in CSV
 
-Captures list context and item indexes
+Each run includes a **summary file** with:
 
-4. Content Sections
-Extracts content organized by headings
+- Total URLs processed
+- Success/failure rate
+- Total extracted records
+- Breakdown by data type
 
-Preserves hierarchical structure (H1-H6)
+Example snippet:
 
-Combines related content pieces
+| report_type | total_urls | successful_urls | failed_urls | total_records | success_rate | scraping_duration |
+|--------------|-------------|------------------|--------------|----------------|---------------|------------------|
+| OVERALL_SUMMARY | 5 | 4 | 1 | 240 | 80.0% | 22.4s |
 
-📈 Output Structure
-Each record includes:
+---
 
-record_id - Unique identifier for each data point
+## 🧰 Dependencies
 
-data_type - Category of data (table_data, version_info, etc.)
+- `httpx`
+- `beautifulsoup4`
+- `selenium`
+- `webdriver-manager`
+- `aiofiles` *(optional for async mode)*
 
-source_url - Original URL source
+Install them all via:
 
-domain - Website domain
+```bash
+pip install httpx beautifulsoup4 selenium webdriver-manager aiofiles
+```
 
-extraction_timestamp - When data was extracted
+---
 
-Type-specific fields (columns, version numbers, content, etc.)
+## 👨‍💻 Author
 
-🔧 Customization
-Adding New Data Extractors
-Extend the StructuredDataParser class:
+**Don**  
+🧩 Cybersecurity & AI Security Enthusiast  
+💻 Focus: Automation, Data Extraction, and Security Research  
+📫 Contact: [LinkedIn or GitHub profile link here]
 
-python
-class CustomDataParser(StructuredDataParser):
-    def _extract_custom_data(self) -> List[Dict[str, Any]]:
-        # Your custom extraction logic
-        custom_data = []
-        # ... extraction code
-        return custom_data
-    
-    def parse_structured_data(self) -> List[Dict[str, Any]]:
-        data = super().parse_structured_data()
-        custom_data = self._extract_custom_data()
-        data.extend(custom_data)
-        return data
-Custom CSV Formatting
-Modify the FormattedCSVExporter class:
+---
 
-python
-class CustomExporter(FormattedCSVExporter):
-    def _organize_data(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        # Your custom organization logic
-        organized_data = []
-        # ... organization code
-        return organized_data
-🐛 Error Handling
-The scraper includes comprehensive error handling:
+## 🪪 License
 
-Retry Mechanism: Automatic retries for failed requests
+This project is licensed under the **MIT License** — free to use, modify, and distribute with attribution.
 
-Timeout Handling: Configurable timeouts for slow responses
+---
 
-Content Validation: Checks for minimum content quality
+## ⭐ Contribute
 
-Logging: Detailed logging for debugging and monitoring
+Pull requests and suggestions are welcome!  
+If you encounter a bug or have an idea for improvement, open an issue on GitHub.
 
-📝 Logging
-Logs are saved to scraper.log with:
+---
 
-Timestamped entries
+### 📈 Summary
+This scraper is ideal for:
+- **Security researchers** gathering software version info  
+- **Data analysts** organizing structured site data  
+- **Developers** automating static data collection workflows
 
-Success/failure indicators
+---
 
-Detailed error information
-
-Extraction statistics
-
-⚠️ Important Notes
-Respect robots.txt: Always check website terms of service
-
-Rate Limiting: Add delays between requests for large-scale scraping
-
-Legal Compliance: Ensure compliance with local laws and website policies
-
-Resource Usage: Monitor memory usage for large scraping jobs
-
-🎪 Example Output
-Summary Report Example:
-text
-report_type,total_urls,successful_urls,failed_urls,total_records,success_rate
-OVERALL_SUMMARY,3,3,0,156,100.0%
-URL_REPORT,https://example.com,45,success,example.com
-DATA_TYPE_SUMMARY,table_data,67,42.9%
-DATA_TYPE_SUMMARY,version_info,23,14.7%
-📞 Support
-For issues and feature requests, please check the logging output and ensure all dependencies are properly installed.
-
-📄 License
-This project is for educational and legitimate web scraping purposes. Users are responsible for complying with website terms of service and applicable laws.
+> “Automate the boring stuff — and export it beautifully.” 🧠
