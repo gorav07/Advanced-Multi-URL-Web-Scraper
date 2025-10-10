@@ -52,7 +52,7 @@ This project is built for **data analysts, researchers, and developers** who nee
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/advanced-multiurl-webscraper.git
+git clone https://github.com/gorav07/advanced-multiurl-webscraper.git
 cd advanced-multiurl-webscraper
 ```
 
