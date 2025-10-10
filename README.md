@@ -182,14 +182,6 @@ pip install httpx beautifulsoup4 selenium webdriver-manager aiofiles
 
 ---
 
-## 👨‍💻 Author
-
-**Don**  
-🧩 Cybersecurity & AI Security Enthusiast  
-💻 Focus: Automation, Data Extraction, and Security Research  
-📫 Contact: [LinkedIn or GitHub profile link here]
-
----
 
 ## 🪪 License
 
