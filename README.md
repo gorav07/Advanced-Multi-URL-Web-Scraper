@@ -203,5 +203,3 @@ This scraper is ideal for:
 - **Developers** automating static data collection workflows
 
 ---
-
-> “Automate the boring stuff — and export it beautifully.” 🧠
